@@ -1,10 +1,6 @@
-import React, { Suspense, useEffect, useRef } from "react";
+import React, { Suspense, useEffect } from "react";
 import { Canvas, useThree } from "@react-three/fiber";
-import {
-  OrbitControls,
-  PerspectiveCamera,
-  useGLTF,
-} from "@react-three/drei";
+import { OrbitControls, useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 
 // Load the model
@@ -18,7 +14,7 @@ function Model({ scale }) {
         // Handle both single and multi-material meshes
         if (Array.isArray(child.material)) {
           child.material.forEach((material) => {
-            consol.log(child.material.side);
+            console.log(child.material.side);
           });
         } else {
           console.log(child.material.side);
@@ -57,9 +53,21 @@ function ResizeHandler() {
 // Main Experience component
 function Experience() {
   return (
-    <Canvas camera={{ position: [3, 5, 5], fov: 45 }}>
+    <Canvas
+      style={{ width: "100vw", height: "100vh" }}
+      camera={{ position: [0, 0, 5], fov: 50 }}
+    >
       {/* Add OrbitControls */}
-      <OrbitControls enableDamping dampingFactor={0.1} />
+      <OrbitControls
+        enableDamping
+        dampingFactor={0.1}
+        maxAzimuthAngle={Math.PI / 4}
+        maxPolarAngle={Math.PI / 2}
+        minPolarAngle={0}
+        maxDistance={10}
+        minDistance={2}
+        enablePan={false}
+      />
 
       {/* Handle resizing */}
       <ResizeHandler />
@@ -68,12 +76,9 @@ function Experience() {
       <ambientLight intensity={0.5} />
       <directionalLight position={[5, 10, 5]} intensity={1} />
 
-      {/* camera  */}
-      {/* <PerspectiveCamera /> */}
-
       {/* Load the model */}
       <Suspense fallback={null}>
-        <Model scale={3} side={THREE.BackSide} />
+        <Model scale={3} />
       </Suspense>
     </Canvas>
   );
