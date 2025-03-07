@@ -3,8 +3,8 @@ import { Canvas, useThree } from "@react-three/fiber";
 import { OrbitControls, useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 
-// Load the model
-function Model({ scale }) {
+// Load the model 
+function Model({ ...props }) {
   const { scene } = useGLTF("./public/model/SiittngRmBaked.glb"); // Ensure the model is in 'public/model/'
 
   scene.traverse((child) => {
@@ -22,7 +22,7 @@ function Model({ scale }) {
       }
     }
   });
-  return <primitive object={scene} scale={[scale, scale, scale]} />;
+  return <primitive object={scene} {...props} />;
 }
 
 // Resize handling component
@@ -64,7 +64,7 @@ function Experience() {
         maxAzimuthAngle={Math.PI / 4}
         maxPolarAngle={Math.PI / 2}
         minPolarAngle={0}
-        maxDistance={10}
+        maxDistance={30}
         minDistance={2}
         enablePan={false}
       />
@@ -76,9 +76,18 @@ function Experience() {
       <ambientLight intensity={0.5} />
       <directionalLight position={[5, 10, 5]} intensity={1} />
 
+      {/* AxesHelper - length is '1' */}
+      <axesHelper args={[1]} />
+
+      {/* A box to check the model scale */}
+      <mesh>
+        <boxGeometry args={[1, 1, 1]} />
+        <meshNormalMaterial wireframe={true} />
+      </mesh>
+
       {/* Load the model */}
       <Suspense fallback={null}>
-        <Model scale={3} />
+        <Model scale={1.0} position={[0, -2.5, 0]} rotation={[0, 0, 0]} />
       </Suspense>
     </Canvas>
   );
